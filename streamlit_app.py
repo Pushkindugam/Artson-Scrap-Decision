@@ -1,3 +1,10 @@
+import os
+
+# Avoid permission error in Hugging Face by setting config dir
+os.environ["STREAMLIT_CONFIG_DIR"] = os.path.expanduser("~/.streamlit")
+os.makedirs(os.environ["STREAMLIT_CONFIG_DIR"], exist_ok=True)
+
+
 import streamlit as st
 
 st.title("♻️ Scrap Reuse vs Sell Decision – Artson EPC")
