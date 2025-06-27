@@ -9,7 +9,7 @@ st.markdown("<h2 style='text-align: center;'>♻️ Scrap Reuse vs Sell Decision
 # ---------------- Sidebar ---------------- #
 with st.sidebar:
     st.image(
-        "https://raw.githubusercontent.com/Pushkindugam/Artson-Scrap-Decision/main/artson_logo.png",
+        "https://github.com/Pushkindugam/Artson-Scrap-Decision/blob/main/artson_logo.png?raw=true",
         use_container_width=True,
         caption="Artson Engineering Ltd."
     )
@@ -20,51 +20,75 @@ with st.sidebar:
     Efficient reuse can save costs, reduce procurement pressure,  
     and support **sustainable EPC operations**.
     """)
-
     st.markdown("---")
     st.markdown("### 🛠️ Built by Artson SCM Team – 2025")
     st.markdown("*by **Pushkin Dugam***")
-    st.markdown("[🔗 GitHub Repository](https://github.com/Pushkindugam/Artson-Steel-WPI-Prediction-Seasonality)")
+    st.markdown("[🔗 GitHub Repository](https://github.com/Pushkindugam/Artson-Scrap-Decision)")
 
 # ---------------- Input Section ---------------- #
 st.header("📥 Input Parameters")
 
-total_required_output = st.number_input("Total material required (kg)", value=1000.0)
+col1, col2 = st.columns(2)
 
-# Scrap Material Type
-material_type = st.selectbox("Scrap Material Type", [
-    "Mild Steel (MS)", "Stainless Steel (SS)", "Aluminum", "Copper", "Brass", "Cast Iron", "Other"
-])
+with col1:
+    total_required_output = st.number_input("Total material required (kg)", value=1000.0)
 
-density = st.number_input(f"Density of {material_type} (kg/m³)", value=7850.0)
+    material_type = st.selectbox("Scrap Material Type", ["Mild Steel (MS)", "Stainless Steel (SS)", "Aluminum", "Copper", "Brass", "Cast Iron", "Other"])
+    if material_type == "Other":
+        density = st.number_input("Enter scrap density manually (kg/m³)", value=7500)
+    else:
+        density_defaults = {
+            "Mild Steel (MS)": 7850,
+            "Stainless Steel (SS)": 8000,
+            "Aluminum": 2700,
+            "Copper": 8940,
+            "Brass": 8530,
+            "Cast Iron": 7200
+        }
+        density = density_defaults[material_type]
 
-# Scrap Available
-input_type = st.radio("Input scrap as:", ["Weight (kg)", "Volume (m³)"])
-if input_type == "Weight (kg)":
-    scrap_available = st.number_input("Scrap available (kg)", value=1000.0)
-else:
-    volume = st.number_input("Scrap volume (m³)", value=0.5)
-    scrap_available = volume * density
-    st.info(f"Estimated scrap weight: **{scrap_available:.1f} kg** (based on entered density)")
+    input_type = st.radio("Input scrap as:", ["Weight (kg)", "Volume (m³)"])
+    if input_type == "Weight (kg)":
+        scrap_available = st.number_input("Scrap available (kg)", value=1000.0)
+    else:
+        volume = st.number_input("Scrap volume (m³)", value=0.5)
+        scrap_available = volume * density
+        st.info(f"Estimated scrap weight: **{scrap_available:.1f} kg** (based on {density} kg/m³)")
 
-scrap_quality = st.slider("Scrap quality factor (0–1)", 0.0, 1.0, 0.6)
+with col2:
+    scrap_quality = st.slider("Scrap quality factor (0–1)", 0.0, 1.0, 0.6)
+    market_price = st.number_input("Market price of scrap (₹/kg)", value=24.0)
 
-# Scrap Value Input & Classification
-market_price = st.number_input("Current market price of scrap (₹ per kg)", value=24.0)
+    use_custom_sale_price = st.checkbox("Use different sale price at site?")
+    if use_custom_sale_price:
+        scrap_sale_price = st.number_input("Sale price at site (₹/kg)", value=market_price)
+    else:
+        scrap_sale_price = market_price
 
-# Cost Parameters
-with st.expander("🚚 Reuse Cost Parameters"):
-    transport_cost_per_kg = st.number_input("Transport cost (₹ per kg)", value=3.0)
-    processing_cost_per_kg = st.number_input("Processing cost (₹ per kg)", value=4.5)
+    transport_cost_per_kg = st.number_input("Transport cost (₹/kg)", value=3.0)
+    processing_cost_per_kg = st.number_input("Processing cost (₹/kg)", value=4.5)
+    new_material_cost = st.number_input("New material cost (₹/kg)", value=56.0)
 
-with st.expander("💸 Market Rates"):
-    new_material_cost = st.number_input("New material cost (₹ per kg)", value=56.0)
-    scrap_sale_price = st.number_input("Scrap sale price at site (₹ per kg)", value=market_price)
-
-# ---------------- Main Logic ---------------- #
+# ---------------- Run Comparison ---------------- #
 if st.button("🔍 Compare Options"):
+    st.subheader("📈 Scrap Value Intelligence")
 
-    # ⚙️ Calculations
+    if market_price < 30:
+        value_level = "🔴 Low Value"
+    elif market_price < 100:
+        value_level = "🟡 Medium Value"
+    else:
+        value_level = "🟢 High Value"
+
+    st.write(f"- **Entered Market Price:** ₹{market_price}/kg")
+    st.write(f"- **Scrap Classification:** {value_level}")
+
+    if material_type in ["Stainless Steel (SS)", "Copper", "Brass"] and scrap_quality > 0.5:
+        st.success(f"🧠 Insight: {material_type} is high value and reusable – prefer reuse.")
+    elif market_price < 30 and scrap_quality < 0.4:
+        st.warning("🧠 Insight: Low quality & low value – consider selling.")
+
+    # ⚙️ Main Logic
     reusable_weight = scrap_available * scrap_quality
     shortfall = max(0, total_required_output - reusable_weight)
 
@@ -75,38 +99,19 @@ if st.button("🔍 Compare Options"):
     total_cost_reuse = transport_cost + processing_cost + fresh_topup_cost
     total_cost_sell_buy = total_required_output * new_material_cost - scrap_available * scrap_sale_price
 
-    # ---------------- Value Classification ---------------- #
-    if market_price < 30:
-        value_level = "🔴 Low Value"
-    elif market_price < 100:
-        value_level = "🟡 Medium Value"
-    else:
-        value_level = "🟢 High Value"
-
-    # ---------------- Scrap Intelligence ---------------- #
-    st.subheader("🧠 Scrap Intelligence")
-    st.write(f"- **Market Price Entered:** ₹{market_price}/kg")
-    st.write(f"- **Scrap Classification:** {value_level}")
-    st.write(f"- **Scrap Quality Factor:** {scrap_quality}")
-
-    if material_type in ["Stainless Steel (SS)", "Copper", "Brass"] and scrap_quality > 0.5:
-        st.success(f"💡 Insight: {material_type} is high value and reusable – consider REUSING.")
-    elif market_price < 30 and scrap_quality < 0.4:
-        st.warning("💡 Insight: Low quality & low value – consider SELLING instead.")
-
-    # ---------------- Recommendation ---------------- #
+    # ✅ Recommendation
     st.subheader("🧭 Recommended Strategy")
     if total_cost_reuse < total_cost_sell_buy:
         st.success("✅ **REUSE SCRAP + BUY TOP-UP** is more economical.")
     else:
         st.warning("✅ **SELL SCRAP & BUY NEW MATERIAL** is more economical.")
 
-    # ---------------- Cost Comparison ---------------- #
+    # 💰 Cost Comparison
     st.subheader("💰 Cost Comparison")
     st.write(f"**Reuse + Top-up Cost:** ₹{total_cost_reuse:,.2f}")
     st.write(f"**Sell & Buy New Cost:** ₹{total_cost_sell_buy:,.2f}")
 
-    # ---------------- Plot ---------------- #
+    # 📊 Bar Plot
     labels = ["Reuse + Top-up", "Sell & Buy New"]
     costs = [total_cost_reuse, total_cost_sell_buy]
     colors = ["#00b300", "#ff6600"]
@@ -118,13 +123,11 @@ if st.button("🔍 Compare Options"):
 
     for bar in bars:
         height = bar.get_height()
-        ax.annotate(f'₹{height:,.0f}',
-                    xy=(bar.get_x() + bar.get_width() / 2, height),
-                    xytext=(0, 6),
-                    textcoords="offset points",
-                    ha='center', va='bottom')
+        ax.annotate(f'₹{height:,.0f}', xy=(bar.get_x() + bar.get_width() / 2, height),
+                    xytext=(0, 6), textcoords="offset points", ha='center', va='bottom')
 
     st.pyplot(fig)
+
 
 
 
