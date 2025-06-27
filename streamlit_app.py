@@ -122,14 +122,8 @@ if st.button("🔍 Compare Options"):
 
     st.pyplot(fig)
 
-    # ---------------- Suggestions ---------------- #
-    with st.expander("💡 Feature Suggestions"):
-        st.markdown("""
-        - 📤 Export this report as PDF/Excel  
-        - 📊 Sensitivity analysis on quality & market price  
-        - ♻️ Estimate carbon savings from reuse  
-        - 🔗 Link to inventory management or ERP system  
-        """)
+
+ 
 
 
 
