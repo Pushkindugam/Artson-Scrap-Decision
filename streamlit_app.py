@@ -2,7 +2,7 @@ import streamlit as st
 import matplotlib.pyplot as plt
 
 # ---------------- Page Setup ---------------- #
-st.set_page_config(page_title="Scrap Decision Tool – Artson", layout="centered")
+st.set_page_config(page_title="Scrap Decision Tool – Artson", layout="wide")
 st.markdown("<h1 style='text-align: center;'>Artson Ltd, A Tata Enterprise</h1>", unsafe_allow_html=True)
 st.markdown("<h2 style='text-align: center;'>♻️ Scrap Reuse vs Sell Decision</h2>", unsafe_allow_html=True)
 
