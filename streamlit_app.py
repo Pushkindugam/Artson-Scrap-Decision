@@ -112,21 +112,21 @@ if st.button("🔍 Compare Options"):
     st.write(f"**Sell & Buy New Cost:** ₹{total_cost_sell_buy:,.2f}")
 
     # 📊 Bar Plot
-    labels = ["Reuse + Top-up", "Sell & Buy New"]
-    costs = [total_cost_reuse, total_cost_sell_buy]
-    colors = ["#00b300", "#ff6600"]
+    # labels = ["Reuse + Top-up", "Sell & Buy New"]
+    # costs = [total_cost_reuse, total_cost_sell_buy]
+    # colors = ["#00b300", "#ff6600"]
 
-    fig, ax = plt.subplots()
-    bars = ax.bar(labels, costs, color=colors)
-    ax.set_ylabel("Total Cost (₹)")
-    ax.set_title("Cost Comparison")
+    # fig, ax = plt.subplots()
+    # bars = ax.bar(labels, costs, color=colors)
+    # ax.set_ylabel("Total Cost (₹)")
+    # ax.set_title("Cost Comparison")
 
-    for bar in bars:
-        height = bar.get_height()
-        ax.annotate(f'₹{height:,.0f}', xy=(bar.get_x() + bar.get_width() / 2, height),
-                    xytext=(0, 6), textcoords="offset points", ha='center', va='bottom')
+    # for bar in bars:
+    #     height = bar.get_height()
+    #     ax.annotate(f'₹{height:,.0f}', xy=(bar.get_x() + bar.get_width() / 2, height),
+    #                 xytext=(0, 6), textcoords="offset points", ha='center', va='bottom')
 
-    st.pyplot(fig)
+    # st.pyplot(fig)
 
 
 
