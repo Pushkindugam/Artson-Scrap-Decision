@@ -1,12 +1,13 @@
 # ♻️ Artson Scrap Reuse vs Sell Decision Tool
 
-An intelligent logistics and procurement decision support tool built for **Artson Engineering Ltd.**
+An intelligent logistics and procurement decision support tool built for **Artson Engineering Ltd. (A Tata Enterprise)**.
 
-This Streamlit app helps you decide whether to:
-- 🚚 **Transport and reuse scrap** at the manufacturing site
+This Streamlit web app helps you evaluate whether to:
+
+- 🚚 **Transport and reuse scrap** at the manufacturing site  
 - 💰 **Sell scrap at the project site and buy fresh material**
 
-It uses real-world EPC cost factors like transport, processing, quality degradation, and scrap resale value to recommend the most cost-effective option.
+It incorporates real-world EPC factors like transport, processing cost, material quality degradation, and resale value to recommend the **most cost-effective** strategy.
 
 🔗 **Live App:**  
 👉 [https://artson-scrap-decision-4mkabtay94pusqbbwc8eft.streamlit.app/](https://artson-scrap-decision-4mkabtay94pusqbbwc8eft.streamlit.app/)
@@ -15,16 +16,18 @@ It uses real-world EPC cost factors like transport, processing, quality degradat
 
 ## 📦 What It Does
 
-- Calculates the **cost of reusing scrap**, including transport and processing
-- Calculates the **net cost of selling scrap on-site and buying fresh**
-- Factors in **scrap quality degradation**
-- Provides a clear, **data-backed recommendation**
+- Calculates **total reuse cost** (transport + processing + top-up material)
+- Calculates **cost of selling scrap and buying fresh material**
+- Adjusts calculations for **scrap quality degradation**
+- Recommends the more economical path using a logic-based comparison
 
 ---
 
-## 📸 Screenshot
+## 📸 Screenshots
 
-<img src="https://github.com/Pushkindugam/Artson-Scrap-Decision/blob/main/Scrap-Decision.png" alt="Artson Scrap Decision Screenshot" width="720"/>
+| Input Screen | Output Screen |
+|--------------|---------------|
+| ![Input](https://github.com/Pushkindugam/Artson-Scrap-Decision/blob/main/Scrap_input_screenshot.png?raw=true) | ![Output](https://github.com/Pushkindugam/Artson-Scrap-Decision/blob/main/Scrap_output_screenshot.png?raw=true) |
 
 ---
 
@@ -32,39 +35,49 @@ It uses real-world EPC cost factors like transport, processing, quality degradat
 
 | Feature                           | Description                                                                 |
 |-----------------------------------|-----------------------------------------------------------------------------|
-| 📊 Quality-based recovery          | Accounts for % loss during reuse (e.g., 60% quality = 40% scrap loss)       |
-| 💰 Total reuse cost calc           | Transport + Processing + Top-up new material                                |
-| 🔁 Smart comparison                | Sell scrap vs. reuse + top-up logic                                         |
-| 🌐 Web-based access                | Built with Streamlit and accessible without login                           |
+| 📊 Quality-based recovery         | Accounts for % loss during reuse (e.g., 60% quality = 40% scrap loss)       |
+| 💰 Total reuse cost calc          | Transport + Processing + Top-up new material                                |
+| 🔁 Smart cost comparison          | Compares Reuse vs Sell+Buy options to minimize cost                         |
+| 🧠 Strategy Insights              | Contextual material guidance based on price & scrap quality                 |
+| 🌐 Web-based access               | Streamlit app accessible without login from any browser                     |
 
 ---
 
 ## 🛠️ How to Use
 
-1. Enter inputs like:
-   - Scrap quantity and quality
-   - Transport cost per kg
-   - Distance
-   - Processing cost, new material cost, and resale value
-2. Click **“Compare Options”**
-3. The tool shows both strategies and recommends the lower-cost one
+1. **Enter parameters** such as:
+   - Total material requirement
+   - Scrap availability (weight or volume)
+   - Material type and quality
+   - Transport, processing, and resale costs
+2. **Click “Compare Options”**
+3. View:
+   - Classification of material (low/medium/high value)
+   - Cost comparison
+   - Final recommendation (reuse or sell)
 
 ---
 
 ## 🏗️ Built For
 
-> Artson Engineering Ltd. (A Tata Enterprise)  
-> By Pushkin Dugam (B.Tech Mechanical, IIT Jodhpur)
+> **Artson Engineering Ltd. (A Tata Enterprise)**  
+> *By Pushkin Dugam (B.Tech Mechanical, IIT Jodhpur)*
 
-Supports decision-making in:
-- Procurement Strategy
-- Site Logistics Planning
-- Cost Optimization in EPC Projects
+Supports smart decision-making in:
+
+- Procurement Strategy  
+- Site Logistics Planning  
+- Cost Optimization in EPC Projects  
+- Sustainable Material Utilization
 
 ---
 
-## 📤 Local Run
+## 📤 Local Run Instructions
+
+Clone the repository and run the app locally:
 
 ```bash
-pip install streamlit
+git clone https://github.com/Pushkindugam/Artson-Scrap-Decision.git
+cd Artson-Scrap-Decision
+pip install -r requirements.txt
 streamlit run streamlit_app.py
